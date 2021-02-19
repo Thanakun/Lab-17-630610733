@@ -20,20 +20,68 @@ string toUpperStr(string x){
     return y;
 }
 
-void importDataFromFile(){
+void importDataFromFile(string filename,vector<string> &names,vector<int> &score,vector<char> &grades){
+    ifstream source;
+    source.open(filename.c_str());
+    string textline;
+    int score1,score2,score3,sumscore = 0;
+    char name1[100];
+    char grade1;
+    while(getline(source,textline)){
+        char format[] = "%[^:]: %d %d %d";
+        sscanf(textline.c_str(),format,name1,&score1,&score2,&score3);
+        sumscore = score1 + score2 + score3;
+        grade1 = score2grade(sumscore);
+        names.push_back(name1);
+        score.push_back(sumscore);
+        grades.push_back(grade1);
+    }
 
 }
 
-void getCommand(){
+void getCommand(string &command, string &key){
+    string temp = "";
+    int start = 0;
+    cout << "Please input your command: ";
+    getline(cin,temp);
+    start = temp.find_first_of(" ");
+    command = temp.substr(0,start);
+    key = temp.substr(start+1 ,temp.size());
 
 }
 
-void searchName(){
-
+void searchName(vector<string> &names,vector<int> &score,vector<char> &grades,string &key){
+    bool flag = false;
+    cout << "---------------------------------" << endl;
+    for(unsigned int i = 0; i < names.size();i++){
+        if(toUpperStr(key) == toUpperStr(names[i])){
+            cout << names[i] <<"'s score = " << score[i] << endl;
+            cout << names[i] <<"'s grade = " << grades[i] << endl;
+            flag = true;
+        }
+    }
+    if(!flag)
+    {
+        cout << "Cannot found." << endl;
+    } 
+    cout << "---------------------------------" << endl;
 }
 
-void searchGrade(){
-
+void searchGrade(vector<string> &names,vector<int> &score,vector<char> &grades, string &key ){
+    bool flag = false;
+    char keyCh = key[0];
+    cout << "---------------------------------" << endl;
+    for(unsigned int i = 0; i < names.size(); i++){
+        if(keyCh == grades[i]){
+            cout << names[i] << " " << "(" << score[i] << ")" << endl;
+            flag =true;
+        }
+    }
+    if(!flag)
+    {
+        cout << "Cannot found." << endl;
+    }
+    cout << "---------------------------------" << endl;
 }
 
 
